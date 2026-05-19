@@ -349,24 +349,3 @@ db.alerts.createIndex({ status: 1, severity: 1 })
 
 db.audit_events.createIndex({ project_id: 1, created_at: -1 })
 ```
-
----
-
-# Motivo da escolha do MongoDB
-
-O schema das predições pode variar dependendo do modelo.
-
-Exemplo:
-
-- um modelo de evasão acadêmica usa frequência e nota;
-- um modelo de fraude usa IP, dispositivo e localização;
-- um modelo de churn usa tickets e uso da plataforma.
-
-MongoDB permite armazenar payloads heterogêneos mantendo:
-
-- flexibilidade;
-- rastreabilidade;
-- histórico completo;
-- agregações rápidas;
-- escalabilidade horizontal;
-- documentos ricos para auditoria.
