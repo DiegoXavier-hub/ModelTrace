@@ -1,0 +1,139 @@
+{
+  "_id": "org_vale_ai",
+  "name": "Vale Advanced Analytics",
+  "plan": "enterprise",
+
+  "users": [
+    {
+      "_id": "usr_001",
+      "name": "Diego Xavier",
+      "role": "admin"
+    },
+    {
+      "_id": "usr_002",
+      "name": "Laura Mendes",
+      "role": "analyst"
+    }
+  ],
+
+  "projects": [
+    {
+      "_id": "proj_dropout",
+      "name": "Student Dropout Prediction",
+      "domain": "education",
+
+      "api_keys": [
+        {
+          "_id": "key_001",
+          "prefix": "mt_live",
+          "status": "active"
+        }
+      ],
+
+      "models": [
+        {
+          "_id": "mdl_dropout_rf",
+          "name": "Dropout Risk Random Forest",
+          "threshold": 0.7,
+
+          "metrics_snapshots": [
+            {
+              "_id": "metric_001",
+              "period": "2026-05",
+              "performance": {
+                "precision": 0.79,
+                "recall": 0.74,
+                "f1_score": 0.76
+              }
+            }
+          ],
+
+          "model_versions": [
+            {
+              "_id": "ver_1_2_0",
+              "version": "1.2.0",
+              "algorithm": "RandomForestClassifier",
+
+              "offline_metrics": {
+                "accuracy": 0.89,
+                "precision": 0.84,
+                "recall": 0.81
+              },
+
+              "predictions": [
+                {
+                  "_id": "pred_001",
+
+                  "entity": {
+                    "entity_id": "student_8821",
+                    "entity_type": "student"
+                  },
+
+                  "features": {
+                    "attendance_rate": 0.61,
+                    "avg_grade": 58.2,
+                    "failed_subjects": 4
+                  },
+
+                  "prediction": {
+                    "label": "high_risk",
+                    "score": 0.82,
+                    "threshold": 0.70
+                  },
+
+                  "decision": {
+                    "action": "send_to_retention_team",
+                    "status": "triggered"
+                  },
+
+                  "feedback": {
+                    "available": true,
+                    "actual_label": "high_risk",
+                    "is_correct": true
+                  },
+
+                  "flags": {
+                    "drift_detected": false,
+                    "high_priority": true
+                  },
+
+                  "metadata": {
+                    "latency_ms": 142,
+                    "source_system": "student-retention-api"
+                  }
+                }
+              ]
+            }
+          ],
+
+          "alerts": [
+            {
+              "_id": "alert_001",
+              "type": "performance_drift",
+              "severity": "high",
+              "status": "open",
+              "description": "Recall abaixo do esperado"
+            }
+          ]
+        }
+      ],
+
+      "audit_events": [
+        {
+          "_id": "audit_001",
+          "event_type": "model_version_promoted",
+
+          "actor": {
+            "type": "user",
+            "id": "usr_001"
+          },
+
+          "resource": {
+            "type": "model_version",
+            "id": "ver_1_2_0"
+          }
+        }
+      ]
+    }
+  ]
+}
