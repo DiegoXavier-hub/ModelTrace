@@ -1,0 +1,15 @@
+# Tema base do ModelTrace Desktop — espelha o design system do frontend original
+# (docs/design-system.md): estética Stripe/Datadog, dark console, brand indigo.
+[theme]
+base = "dark"
+primaryColor = "#7c5cff"
+backgroundColor = "#07090d"
+secondaryBackgroundColor = "#0e1218"
+textColor = "#e6e9ef"
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
