@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>ModelTrace — Pipeline NoSQL (apresentacao)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0a0d13; --panel:#131824; --panel2:#0f1420; --stroke:#1e2633;
+    --ink:#e6edf3; --muted:#8b98a9; --violet:#a78bfa; --violet2:#8b5cf6;
+    --green:#22c55e; --amber:#eab308; --cyan:#38bdf8; --pink:#f472b6; --red:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:'Segoe UI',Inter,sans-serif;overflow:hidden}
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{position:absolute;inset:0;padding:46px 64px;opacity:0;visibility:hidden;
+    transition:opacity .25s;display:flex;flex-direction:column;
+    background:radial-gradient(1000px 500px at 15% -10%,#141b2b,#0a0d13)}
+  .slide.active{opacity:1;visibility:visible}
+  h1{font-size:44px;margin:0 0 8px;letter-spacing:.3px}
+  h2{font-size:30px;margin:0 0 4px}
+  h2 .n{color:var(--violet);font-family:'IBM Plex Mono',monospace;font-size:19px;margin-right:10px}
+  .sub{color:var(--muted);font-size:17px;margin:0 0 22px}
+  .kicker{color:var(--violet);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:13px;margin-bottom:14px}
+  code,pre{font-family:'IBM Plex Mono',Consolas,monospace}
+  pre{background:var(--panel2);border:1px solid var(--stroke);border-radius:12px;
+    padding:16px 18px;font-size:14.5px;line-height:1.5;color:#cfe0f0;overflow:auto;margin:0}
+  pre .c{color:#5f728a}          /* comment */
+  pre .k{color:var(--pink)}      /* keyword */
+  pre .s{color:var(--green)}     /* string  */
+  pre .o{color:var(--amber)}     /* op stage */
+  pre .f{color:var(--cyan)}      /* func    */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;min-height:0}
+  .cols.wide{grid-template-columns:1.25fr .75fr}
+  .card{background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:16px 18px}
+  .pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:13px;
+    background:#8b5cf618;border:1px solid #8b5cf644;color:var(--violet);border-radius:999px;padding:3px 12px;margin:3px 4px 0 0}
+  .pill.g{background:#22c55e15;border-color:#22c55e44;color:var(--green)}
+  .pill.p{background:#f472b615;border-color:#f472b644;color:var(--pink)}
+  .stages{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+  .st{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--amber);
+     background:#eab30812;border:1px solid #eab30838;border-radius:6px;padding:2px 9px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--stroke)}
+  th{color:var(--muted);font-weight:600}
+  td.mono,.mono{font-family:'IBM Plex Mono',monospace}
+  .good{color:var(--green)} .warn{color:var(--amber)}
+  img{max-width:100%;max-height:100%;object-fit:contain;border:1px solid var(--stroke);border-radius:12px}
+  .imgrow{display:flex;gap:14px;flex:1;min-height:0}
+  .imgrow img{flex:1;min-width:0}
+  ul{margin:6px 0;padding-left:20px;line-height:1.7} li{margin:3px 0}
+  .foot{position:absolute;bottom:18px;right:26px;color:var(--muted);font-size:13px;font-family:'IBM Plex Mono',monospace}
+  .foot .cur{color:var(--violet)}
+  .badge{display:inline-block;background:#22c55e18;border:1px solid #22c55e44;color:var(--green);
+    border-radius:8px;padding:2px 10px;font-size:13px;font-family:'IBM Plex Mono',monospace}
+  .center{align-items:flex-start;justify-content:center}
+  .hero{display:flex;flex-direction:column;justify-content:center;flex:1}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .muted{color:var(--muted)}
+  .big{font-size:19px;line-height:1.6}
+</style></head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide active">
+    <div class="hero">
+      <div class="kicker">Projeto NoSQL · UFU Gestao da Informacao</div>
+      <h1>ModelTrace — Pipeline de Banco NoSQL</h1>
+      <p class="sub big">Observabilidade e governanca de decisoes de Machine Learning sobre um modelo
+      <b>documental (MongoDB)</b> + <b>chave-valor / probabilistico (Redis)</b>.</p>
+      <div>
+        <span class="pill">MongoDB 7</span>
+        <span class="pill">Redis Stack (RedisBloom)</span>
+        <span class="pill">pymongo</span>
+        <span class="pill">Streamlit</span>
+        <span class="pill g">9 colecoes principais</span>
+        <span class="pill g">1.040+ predicoes</span>
+        <span class="pill p">2 aggregation pipelines</span>
+      </div>
+      <p class="sub" style="margin-top:26px">Um unico arquivo de CRUD: <span class="mono">docs/pipeline/crud_pipeline.py</span></p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <h2><span class="n">01</span>Modelagem — referencia (1:N) + agregacao (embedding)</h2>
+    <p class="sub">A colecao <span class="mono">predictions</span> agrega toda a decisao em 1 documento; sub-documentos ficam embutidos.</p>
+    <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center">
+      <img src="modelagem-er-simplificada.png" alt="ER simplificado">
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <h2><span class="n">02</span>Criar &amp; popular as principais colecoes</h2>
+    <div class="cols">
+      <div>
+        <pre><span class="c"># cria as colecoes + indices (inclui unique)</span>
+<span class="k">for</span> name <span class="k">in</span> MAIN_COLLECTIONS:
+    self.db.<span class="f">create_collection</span>(name)
+
+self.db.predictions.<span class="f">create_index</span>(
+  [(<span class="s">"metadata.request_id"</span>, ASCENDING)],
+  unique=<span class="k">True</span>, sparse=<span class="k">True</span>)   <span class="c"># idempotencia</span>
+
+<span class="c"># popula org, users, projects, models, versions</span>
+self.db.organizations.<span class="f">insert_one</span>({...})
+self.db.users.<span class="f">insert_many</span>([...])
+<span class="c"># e ~1.040 predicoes em lote:</span>
+self.db.predictions.<span class="f">insert_many</span>(batch)</pre>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Colecoes populadas</h3>
+        <table>
+          <tr><td class="mono">organizations</td><td class="good">1</td><td class="mono">projects</td><td class="good">3</td></tr>
+          <tr><td class="mono">users</td><td class="good">2</td><td class="mono">models</td><td class="good">4</td></tr>
+          <tr><td class="mono">model_versions</td><td class="good">8</td><td class="mono">predictions</td><td class="good">1.040</td></tr>
+          <tr><td class="mono">metrics_snapshots</td><td class="good">8</td><td class="mono">entity_notes</td><td class="good">18</td></tr>
+          <tr><td class="mono">audit_events</td><td class="good">3</td><td></td><td></td></tr>
+        </table>
+        <p class="muted" style="margin-bottom:0">Dominios: educacao (evasao TCC), industrial (Vale) e economico (CNPJ).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <h2><span class="n">03</span>CRUD — INSERT com idempotencia (Bloom Filter)</h2>
+    <div class="cols">
+      <div>
+        <pre><span class="k">def</span> <span class="f">insert_prediction</span>(self, doc):
+    req = doc[<span class="s">"metadata"</span>][<span class="s">"request_id"</span>]
+    <span class="c"># Bloom: ja processamos esse request?</span>
+    <span class="k">if</span> self.r.<span class="f">execute_command</span>(
+        <span class="s">"BF.EXISTS"</span>, <span class="s">"mt:seen_requests"</span>, req):
+        <span class="k">return</span> {<span class="s">"status"</span>: <span class="s">"duplicate_skipped"</span>}
+    self.db.predictions.<span class="f">insert_one</span>(doc)
+    self.<span class="f">redis_ingest</span>(doc)
+    self.<span class="f">append_audit</span>(doc[<span class="s">"project_id"</span>],
+                     <span class="s">"prediction.created"</span>, {...})
+    <span class="k">return</span> {<span class="s">"status"</span>: <span class="s">"inserted"</span>}</pre>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Log de saida</h3>
+        <pre style="border:0;background:transparent;padding:0">1a insercao:
+  <span class="good">{'status': 'inserted',
+   'prediction_id': 'pred_f47…'}</span>
+
+2a insercao (mesmo request_id):
+  <span class="warn">{'status': 'duplicate_skipped',
+   'request_id': 'manual_demo_0001'}</span></pre>
+        <p class="muted">O Bloom Filter evita reprocessar a mesma decisao — O(1), ~138&nbsp;KB para 100k requests.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <h2><span class="n">04</span>CRUD — FIND · UPDATE · DELETE</h2>
+    <div class="cols">
+      <div>
+        <pre><span class="c"># FIND: filtro + projecao + sort + paginacao</span>
+self.db.predictions.<span class="f">find</span>(filter_, projection) \
+    .<span class="f">sort</span>([(<span class="s">"prediction.score"</span>, -1)]) \
+    .<span class="f">skip</span>(skip).<span class="f">limit</span>(limit)
+
+<span class="c"># UPDATE one: anexa feedback (sub-doc embutido)</span>
+self.db.predictions.<span class="f">update_one</span>(
+  {<span class="s">"_id"</span>: pred_id},
+  {<span class="s">"$set"</span>: {<span class="s">"feedback.available"</span>: <span class="k">True</span>,
+           <span class="s">"feedback.classification_result"</span>: cls}})
+
+<span class="c"># UPDATE many / DELETE many</span>
+self.db.predictions.<span class="f">update_many</span>(flt, {<span class="s">"$set"</span>: {...}})
+self.db.predictions.<span class="f">delete_one</span>({<span class="s">"_id"</span>: pred_id})</pre>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center">
+        <img src="screenshots/mt-04-update.png" alt="tela UPDATE">
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <h2><span class="n">05</span>Aggregation Pipeline 1 — Leaderboard de modelos</h2>
+    <p class="sub">Funcionalidade: ranquear modelos por F1 a partir do feedback real. Resultado materializado com <span class="mono">$merge</span>.</p>
+    <div class="stages">
+      <span class="st">$match</span><span class="st">$group</span><span class="st">$set</span><span class="st">$lookup</span><span class="st">$unwind</span><span class="st">$project</span><span class="st">$sort</span><span class="st">$merge</span>
+    </div>
+    <div class="cols wide" style="margin-top:14px">
+      <div>
+        <pre>[{<span class="o">"$match"</span>: {<span class="s">"feedback.available"</span>: <span class="k">True</span>}},
+ {<span class="o">"$group"</span>: {<span class="s">"_id"</span>: {<span class="s">"model_id"</span>:<span class="s">"$model_id"</span>,
+                    <span class="s">"version"</span>:<span class="s">"$model_version"</span>},
+            <span class="s">"tp"</span>:{<span class="s">"$sum"</span>:{<span class="s">"$cond"</span>:[{<span class="s">"$eq"</span>:[
+               <span class="s">"$feedback.classification_result"</span>,<span class="s">"tp"</span>]},1,0]}} }},
+ {<span class="o">"$set"</span>: {<span class="s">"f1"</span>: <span class="c">/* 2PR/(P+R) */</span> }},
+ {<span class="o">"$lookup"</span>: {<span class="s">"from"</span>:<span class="s">"models"</span>,<span class="s">"localField"</span>:<span class="s">"_id.model_id"</span>,
+             <span class="s">"foreignField"</span>:<span class="s">"_id"</span>,<span class="s">"as"</span>:<span class="s">"model"</span>}},
+ {<span class="o">"$unwind"</span>:<span class="s">"$model"</span>}, {<span class="o">"$project"</span>: {...}},
+ {<span class="o">"$sort"</span>: {<span class="s">"f1"</span>: -1}},
+ {<span class="o">"$merge"</span>: {<span class="s">"into"</span>:<span class="s">"metrics_snapshots"</span>,<span class="s">"on"</span>:<span class="s">"_id"</span>}}]</pre>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Resultado</h3>
+        <table>
+          <tr><th>modelo</th><th>F1</th><th>P</th><th>R</th><th>n</th></tr>
+          <tr><td class="mono">RandomForest v1</td><td class="good mono">.704</td><td class="mono">.731</td><td class="mono">.679</td><td class="mono">43</td></tr>
+          <tr><td class="mono">XGBoost v2</td><td class="mono">.620</td><td class="mono">.635</td><td class="mono">.606</td><td class="mono">130</td></tr>
+          <tr><td class="mono">RandomForest v2</td><td class="mono">.614</td><td class="mono">.595</td><td class="mono">.633</td><td class="mono">149</td></tr>
+          <tr><td class="mono">DontGo v2</td><td class="mono">.339</td><td class="mono">.455</td><td class="mono">.270</td><td class="mono">142</td></tr>
+        </table>
+        <p class="muted" style="margin-bottom:0">V1 lidera em F1, mas com n=43; v2 tem 3x mais feedback — trade-off amostra × metrica.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <h2><span class="n">06</span>Aggregation Pipeline 2 — Drivers de risco</h2>
+    <p class="sub">Funcionalidade: quais features empurram a decisao para "risco alto" + amostra auditavel aleatoria.</p>
+    <div class="stages">
+      <span class="st">$match</span><span class="st">$facet</span><span class="st">$unwind</span><span class="st">$group</span><span class="st">$sort</span><span class="st">$limit</span><span class="st">$sample</span><span class="st">$lookup</span><span class="st">$project</span><span class="st">$count</span>
+    </div>
+    <div class="cols wide" style="margin-top:14px">
+      <div>
+        <pre>[{<span class="o">"$match"</span>: {<span class="s">"project_id"</span>: pid,
+           <span class="s">"prediction.score_band"</span>:{<span class="s">"$in"</span>:[<span class="s">"high"</span>,<span class="s">"critical"</span>]}}},
+ {<span class="o">"$facet"</span>: {
+   <span class="s">"drivers"</span>:[{<span class="o">"$unwind"</span>:<span class="s">"$explanations"</span>},
+              {<span class="o">"$group"</span>:{<span class="s">"_id"</span>:<span class="s">"$explanations.feature"</span>,
+                       <span class="s">"avg_impact"</span>:{<span class="s">"$avg"</span>:<span class="s">"$explanations.impact"</span>}}},
+              {<span class="o">"$sort"</span>:{<span class="s">"avg_impact"</span>:-1}},{<span class="o">"$limit"</span>:5}],
+   <span class="s">"audit_sample"</span>:[{<span class="o">"$sample"</span>:{<span class="s">"size"</span>:3}},
+              {<span class="o">"$lookup"</span>:{<span class="s">"from"</span>:<span class="s">"entity_notes"</span>, ...}}],
+   <span class="s">"universe"</span>:[{<span class="o">"$count"</span>:<span class="s">"high_risk_total"</span>}] }}]</pre>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Resultado (educacao)</h3>
+        <table>
+          <tr><th>feature</th><th>impacto medio</th><th>top driver</th></tr>
+          <tr><td class="mono">taxa_aprovacao</td><td class="mono">0.157</td><td class="mono">44x</td></tr>
+          <tr><td class="mono">qtd_reprovacoes</td><td class="mono">0.154</td><td class="mono">58x</td></tr>
+          <tr><td class="mono">delta_nota</td><td class="mono">0.152</td><td class="mono">43x</td></tr>
+          <tr><td class="mono">nota_media</td><td class="mono">0.151</td><td class="mono">70x</td></tr>
+        </table>
+        <p class="muted">Universo de risco alto: <span class="badge">280 docs</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <h2><span class="n">07</span>Redis — estruturas comuns</h2>
+    <div class="cols">
+      <div>
+        <pre><span class="c"># Hash: contadores ao vivo por modelo</span>
+r.<span class="f">hincrby</span>(<span class="s">"mt:counters:{model}"</span>, <span class="s">"predictions"</span>, 1)
+<span class="c"># Sorted Set: ranking de risco por projeto</span>
+r.<span class="f">zadd</span>(<span class="s">"mt:risk:{proj}"</span>, {entity: score}, gt=<span class="k">True</span>)
+<span class="c"># List: stream das ultimas predicoes</span>
+r.<span class="f">lpush</span>(<span class="s">"mt:stream:{proj}"</span>, payload); r.<span class="f">ltrim</span>(k,0,49)
+<span class="c"># String cache com TTL</span>
+r.<span class="f">set</span>(<span class="s">"mt:cache:dashboard"</span>, json, ex=120)
+<span class="c"># Counter + EXPIRE: rate limit por API key</span>
+n = r.<span class="f">incr</span>(k);  r.<span class="f">expire</span>(k, 60)
+<span class="k">return</span> n &lt;= limit</pre>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Uso no sistema</h3>
+        <table>
+          <tr><th>Estrutura</th><th>Recurso</th></tr>
+          <tr><td class="mono">String</td><td>cache do dashboard</td></tr>
+          <tr><td class="mono">Hash</td><td>KPIs por modelo</td></tr>
+          <tr><td class="mono">Sorted Set</td><td>top entidades de risco</td></tr>
+          <tr><td class="mono">List</td><td>feed de atividade</td></tr>
+          <tr><td class="mono">Counter</td><td>rate limit de API</td></tr>
+        </table>
+        <p class="muted mono">rate limit 5/60s → [T,T,T,T,T,<span class="warn">F,F</span>]</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <h2><span class="n">08</span>Redis — estruturas probabilisticas</h2>
+    <div class="cols">
+      <div>
+        <pre><span class="c"># HyperLogLog: entidades unicas (cardinalidade)</span>
+r.<span class="f">pfadd</span>(<span class="s">"mt:hll:entities:{model}"</span>, entity_id)
+r.<span class="f">pfcount</span>(k)                       <span class="c"># ~= 65</span>
+<span class="c"># Bloom Filter: idempotencia por request_id</span>
+r.<span class="f">execute_command</span>(<span class="s">"BF.ADD"</span>,  <span class="s">"mt:seen_requests"</span>, req)
+r.<span class="f">execute_command</span>(<span class="s">"BF.EXISTS"</span>,<span class="s">"mt:seen_requests"</span>, req)
+<span class="c"># Count-Min Sketch: frequencia aprox. por entidade</span>
+r.<span class="f">execute_command</span>(<span class="s">"CMS.INCRBY"</span>, <span class="s">"mt:entity_freq"</span>, e, 1)
+<span class="c"># Top-K: heavy hitters (entidades mais avaliadas)</span>
+r.<span class="f">execute_command</span>(<span class="s">"TOPK.ADD"</span>, <span class="s">"mt:top_entities"</span>, e)</pre>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Por que probabilistico?</h3>
+        <ul class="big">
+          <li><b>HyperLogLog</b> — milhoes de entidades unicas em ~12&nbsp;KB.</li>
+          <li><b>Bloom</b> — dedup O(1) sem consultar o Mongo; casa com o <span class="mono">request_id</span> unique.</li>
+          <li><b>Count-Min</b> — frequencia aproximada com memoria fixa.</li>
+          <li><b>Top-K</b> — top entidades sem ordenar tudo.</li>
+        </ul>
+        <p class="badge">Bloom: 1.041 itens · capacidade 100k · 138 KB</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <h2><span class="n">09</span>Prototipo Streamlit — telas de CRUD</h2>
+    <p class="sub">Funcionalidade mais importante: gerir decisoes de ML. Campos dinamicos por contrato do modelo.</p>
+    <div class="imgrow">
+      <img src="screenshots/mt-01-dashboard.png" alt="dashboard">
+      <img src="screenshots/mt-02b-insert-result.png" alt="insert">
+      <img src="screenshots/mt-03-find.png" alt="find">
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <h2><span class="n">10</span>Como rodar &amp; checklist da entrega</h2>
+    <div class="cols">
+      <div>
+        <pre><span class="c"># 1) infra (Docker)</span>
+docker run -d -p 27018:27017 mongo:7
+docker run -d -p 6380:6379 redis/redis-stack-server
+
+<span class="c"># 2) pipeline de banco (cria, popula, CRUD, agg, redis)</span>
+python docs/pipeline/crud_pipeline.py
+
+<span class="c"># 3) prototipo de interface</span>
+streamlit run docs/pipeline/streamlit_app.py</pre>
+        <p class="muted">Um unico arquivo de CRUD: <span class="mono">crud_pipeline.py</span>. Logs em <span class="mono">docs/pipeline/logs/</span>.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Entregaveis</h3>
+        <ul class="big">
+          <li>✅ Prototipo Streamlit da funcionalidade principal</li>
+          <li>✅ Criar &amp; popular principais colecoes</li>
+          <li>✅ INSERT / FIND / UPDATE / DELETE (telas + codigo)</li>
+          <li>✅ Prints de cada tela e cada colecao</li>
+          <li>✅ 2 aggregation pipelines (match, group, set, lookup, unwind, project, sort, merge, sample, facet, count)</li>
+          <li>✅ Redis: 5 estruturas comuns + 4 probabilisticas</li>
+          <li>✅ ER simplificado com agregacoes</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot"><span class="cur" id="cur">1</span> / <span id="tot">11</span> &nbsp;·&nbsp; ← → para navegar</div>
+</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0; const cur=document.getElementById('cur');
+  document.getElementById('tot').textContent=slides.length;
+  function go(n){i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));cur.textContent=i+1;}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key))go(i+1);
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key))go(i-1);
+    if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);});
+  document.getElementById('deck').addEventListener('click',e=>{
+    if(e.clientX < window.innerWidth*0.25) go(i-1); else go(i+1);});
+</script>
+</body></html>

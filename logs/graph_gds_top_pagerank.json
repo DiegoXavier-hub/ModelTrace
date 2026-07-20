@@ -1,0 +1,92 @@
+[
+  {
+    "id": "outcome::tn",
+    "label": "TN",
+    "type": "Outcome",
+    "pagerank": 8.4939
+  },
+  {
+    "id": "outcome::pending",
+    "label": "PENDING",
+    "type": "Outcome",
+    "pagerank": 8.2964
+  },
+  {
+    "id": "feat::nota_media",
+    "label": "nota_media",
+    "type": "Feature",
+    "pagerank": 3.9311
+  },
+  {
+    "id": "outcome::fn",
+    "label": "FN",
+    "type": "Outcome",
+    "pagerank": 3.8298
+  },
+  {
+    "id": "outcome::tp",
+    "label": "TP",
+    "type": "Outcome",
+    "pagerank": 3.638
+  },
+  {
+    "id": "feat::germinacao_inicial_pct",
+    "label": "germinacao_inicial_pct",
+    "type": "Feature",
+    "pagerank": 3.4711
+  },
+  {
+    "id": "feat::taxa_aprovacao",
+    "label": "taxa_aprovacao",
+    "type": "Feature",
+    "pagerank": 3.4217
+  },
+  {
+    "id": "feat::idade_armazenagem_meses",
+    "label": "idade_armazenagem_meses",
+    "type": "Feature",
+    "pagerank": 3.3598
+  },
+  {
+    "id": "feat::coorte_abertura_ano_c",
+    "label": "coorte_abertura_ano_c",
+    "type": "Feature",
+    "pagerank": 3.0325
+  },
+  {
+    "id": "feat::Tag_Frota",
+    "label": "Tag_Frota",
+    "type": "Feature",
+    "pagerank": 2.9853
+  },
+  {
+    "id": "outcome::fp",
+    "label": "FP",
+    "type": "Outcome",
+    "pagerank": 2.8914
+  },
+  {
+    "id": "feat::qtd_reprovacoes",
+    "label": "qtd_reprovacoes",
+    "type": "Feature",
+    "pagerank": 2.8772
+  },
+  {
+    "id": "feat::pureza_fisica_pct",
+    "label": "pureza_fisica_pct",
+    "type": "Feature",
+    "pagerank": 2.8573
+  },
+  {
+    "id": "feat::umidade_semente_pct",
+    "label": "umidade_semente_pct",
+    "type": "Feature",
+    "pagerank": 2.742
+  },
+  {
+    "id": "feat::idade_empresa_meses",
+    "label": "idade_empresa_meses",
+    "type": "Feature",
+    "pagerank": 2.6657
+  }
+]

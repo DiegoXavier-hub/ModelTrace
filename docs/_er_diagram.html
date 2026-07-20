@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+  :root{
+    --bg:#0a0d13; --panel:#131824; --panel2:#0f1420; --stroke:#1e2633;
+    --ink:#e6edf3; --muted:#8b98a9; --violet:#a78bfa; --violet2:#8b5cf6;
+    --green:#22c55e; --amber:#eab308; --orange:#f97316; --red:#ef4444;
+    --cyan:#38bdf8; --pink:#f472b6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#141b2b,#0a0d13);
+       color:var(--ink);font-family:'Segoe UI',Inter,sans-serif;padding:30px 34px;width:1600px}
+  h1{font-size:30px;margin:0 0 3px;letter-spacing:.2px}
+  h1 .db{color:var(--violet)}
+  .sub{color:var(--muted);margin:0 0 14px;font-size:15px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;font-size:13px;color:var(--muted)}
+  .legend b{color:var(--ink);font-weight:600}
+  .chip{display:inline-flex;align-items:center;gap:7px}
+  .sw{width:15px;height:15px;border-radius:4px;display:inline-block}
+
+  /* reference relationship ribbon */
+  .refmap{display:flex;align-items:center;gap:0;margin-bottom:20px;flex-wrap:wrap}
+  .node{background:var(--panel);border:1px solid var(--stroke);border-radius:11px;
+        padding:9px 15px;min-width:120px}
+  .node .n{font-family:'IBM Plex Mono',Consolas,monospace;font-weight:700;color:var(--cyan);font-size:14px}
+  .node .k{color:var(--muted);font-size:11px;margin-top:2px}
+  .arrow{display:flex;flex-direction:column;align-items:center;color:var(--muted);
+         padding:0 10px;font-size:12px;min-width:64px}
+  .arrow .ln{color:var(--violet);font-size:18px;line-height:1}
+  .arrow .card{font-size:11px;color:var(--amber)}
+  .branch{display:flex;flex-direction:column;gap:8px}
+
+  .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start}
+
+  /* predictions central card */
+  .pred{background:linear-gradient(180deg,#151b2b,#10141f);border:1.5px solid #34406a;
+        border-radius:16px;padding:16px 18px;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+  .pred .title{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .pred .title .name{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:800;color:var(--violet)}
+  .pred .title .tag{font-size:11px;color:var(--green);background:#22c55e18;border:1px solid #22c55e44;
+        padding:2px 10px;border-radius:999px}
+  .refs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+  .ref{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cyan);
+       background:#38bdf815;border:1px solid #38bdf83a;border-radius:6px;padding:2px 8px}
+  .embeds{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .emb{background:var(--panel2);border:1px dashed #3b4a63;border-radius:11px;padding:10px 12px}
+  .emb.full{grid-column:1 / -1}
+  .emb h4{margin:0 0 6px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink);
+          display:flex;align-items:center;gap:8px}
+  .emb h4 .dot{width:9px;height:9px;border-radius:50%}
+  .emb .fields{display:flex;flex-wrap:wrap;gap:5px}
+  .f{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+     background:#0b0f18;border:1px solid var(--stroke);border-radius:5px;padding:1px 7px}
+  .f b{color:#cdd7e3;font-weight:500}
+  .nest{margin-top:7px;padding-left:10px;border-left:2px solid #34406a}
+
+  aside{display:flex;flex-direction:column;gap:16px}
+  .box{background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:14px 16px}
+  .box h3{margin:0 0 10px;font-size:15px;display:flex;align-items:center;gap:8px}
+  .box h3 .bar{width:4px;height:16px;border-radius:2px;background:var(--violet2)}
+  .satellite{display:flex;flex-direction:column;gap:9px}
+  .sat{display:flex;gap:10px;align-items:flex-start;background:var(--panel2);
+       border:1px solid var(--stroke);border-radius:9px;padding:8px 11px}
+  .sat .sn{font-family:'IBM Plex Mono',monospace;color:var(--pink);font-size:13px;font-weight:700;white-space:nowrap}
+  .sat .sd{color:var(--muted);font-size:12px;line-height:1.4}
+  .sat .sd b{color:#cdd7e3;font-weight:600}
+
+  table.redis{width:100%;border-collapse:collapse;font-size:12px}
+  table.redis td{padding:6px 6px;border-bottom:1px solid var(--stroke);vertical-align:top}
+  table.redis .s{font-family:'IBM Plex Mono',monospace;font-weight:700;white-space:nowrap}
+  table.redis .u{color:var(--muted)}
+  .grp{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);
+       padding:8px 6px 3px;font-weight:700}
+  .kbd{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--amber)}
+</style></head>
+<body>
+  <h1>ModelTrace — Modelagem NoSQL simplificada <span class="db">(MongoDB + Redis)</span></h1>
+  <p class="sub">Modelo documental: relacionamentos por referencia (1:N) + <b>agregacao por embedding</b> (o que esta dentro do que). A colecao <code>predictions</code> agrega toda a decisao de ML em um unico documento.</p>
+
+  <div class="legend">
+    <span class="chip"><span class="sw" style="background:#131824;border:1px solid #34406a"></span><b>Colecao</b></span>
+    <span class="chip"><span class="sw" style="background:#0f1420;border:1px dashed #3b4a63"></span><b>Documento embutido</b> (agregado / nested)</span>
+    <span class="chip"><span class="sw" style="background:var(--violet)"></span><b>&rarr; 1:N</b> referencia por chave</span>
+    <span class="chip"><span class="sw" style="background:var(--pink)"></span><b>Redis</b> estruturas de apoio</span>
+  </div>
+
+  <!-- reference relationships -->
+  <div class="refmap">
+    <div class="node"><div class="n">organizations</div><div class="k">_id · tenant raiz</div></div>
+    <div class="arrow"><span class="card">1:N</span><span class="ln">&rarr;</span><span>org_id</span></div>
+    <div class="branch">
+      <div class="node"><div class="n">users</div><div class="k">_id · org_id</div></div>
+      <div class="node"><div class="n">projects</div><div class="k">_id · org_id</div></div>
+    </div>
+    <div class="arrow"><span class="card">1:N</span><span class="ln">&rarr;</span><span>project_id</span></div>
+    <div class="node"><div class="n">models</div><div class="k">_id · project_id</div></div>
+    <div class="arrow"><span class="card">1:N</span><span class="ln">&rarr;</span><span>model_id</span></div>
+    <div class="node"><div class="n">model_versions</div><div class="k">_id · model_id</div></div>
+    <div class="arrow"><span class="card">1:N</span><span class="ln">&rarr;</span><span>*_id</span></div>
+    <div class="node" style="border-color:#34406a"><div class="n" style="color:var(--violet)">predictions</div><div class="k">documento central</div></div>
+  </div>
+
+  <div class="grid">
+    <!-- predictions with embedded aggregates -->
+    <div class="pred">
+      <div class="title">
+        <span class="name">predictions</span>
+        <span class="tag">documento agregado · 1 decisao = 1 documento</span>
+      </div>
+      <div class="refs">
+        <span class="ref">org_id &rarr; organizations</span>
+        <span class="ref">project_id &rarr; projects</span>
+        <span class="ref">model_id &rarr; models</span>
+        <span class="ref">model_version_id &rarr; model_versions</span>
+      </div>
+      <div class="embeds">
+        <div class="emb">
+          <h4><span class="dot" style="background:var(--cyan)"></span>entity <span style="color:var(--muted);font-weight:400">(objeto)</span></h4>
+          <div class="fields"><span class="f"><b>id</b></span><span class="f"><b>id_hash</b></span><span class="f"><b>type</b></span><span class="f">display_name_masked</span></div>
+        </div>
+        <div class="emb">
+          <h4><span class="dot" style="background:var(--green)"></span>prediction <span style="color:var(--muted);font-weight:400">(objeto)</span></h4>
+          <div class="fields"><span class="f"><b>label</b></span><span class="f"><b>score</b></span><span class="f">threshold</span><span class="f">above_threshold</span><span class="f">score_band</span></div>
+        </div>
+        <div class="emb full">
+          <h4><span class="dot" style="background:var(--amber)"></span>features <span style="color:var(--muted);font-weight:400">(mapa livre — schema flexivel por modelo)</span></h4>
+          <div class="fields"><span class="f">nota_media</span><span class="f">taxa_aprovacao</span><span class="f">vibration_rms</span><span class="f">oil_temp_c</span><span class="f">idade_meses</span><span class="f">uf</span><span class="f">…</span></div>
+        </div>
+        <div class="emb full">
+          <h4><span class="dot" style="background:var(--orange)"></span>explanations <span style="color:var(--muted);font-weight:400">(array de objetos)</span></h4>
+          <div class="nest"><div class="fields"><span class="f"><b>feature</b></span><span class="f">value</span><span class="f"><b>impact</b></span><span class="f">direction</span><span class="f">rank</span></div></div>
+        </div>
+        <div class="emb">
+          <h4><span class="dot" style="background:var(--violet)"></span>decision <span style="color:var(--muted);font-weight:400">(objeto)</span></h4>
+          <div class="fields"><span class="f"><b>action</b></span><span class="f">status</span><span class="f">reason</span></div>
+        </div>
+        <div class="emb">
+          <h4><span class="dot" style="background:var(--red)"></span>feedback <span style="color:var(--muted);font-weight:400">(objeto)</span></h4>
+          <div class="fields"><span class="f">available</span><span class="f">observed_value</span><span class="f"><b>classification_result</b></span><span class="f">received_at</span></div>
+        </div>
+        <div class="emb">
+          <h4><span class="dot" style="background:var(--pink)"></span>flags <span style="color:var(--muted);font-weight:400">(objeto)</span></h4>
+          <div class="fields"><span class="f">is_critical</span><span class="f">reviewed_by</span><span class="f">escalated</span></div>
+        </div>
+        <div class="emb">
+          <h4><span class="dot" style="background:#94a3b8"></span>metadata <span style="color:var(--muted);font-weight:400">(objeto)</span></h4>
+          <div class="fields"><span class="f">source_system</span><span class="f">environment</span><span class="f"><b>request_id</b> (unique)</span><span class="f">algorithm</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- satellite + redis -->
+    <aside>
+      <div class="box">
+        <h3><span class="bar"></span>Colecoes materializadas &amp; satelites</h3>
+        <div class="satellite">
+          <div class="sat"><span class="sn">metrics_snapshots</span><span class="sd">Leaderboard de performance (tp/fp/tn/fn, precision, recall, f1) materializado pelo <b>$merge</b> do aggregation pipeline 1.</span></div>
+          <div class="sat"><span class="sn">entity_notes</span><span class="sd">Notas operacionais por entidade; ligadas as predicoes via <b>$lookup</b> (entity_id_hash) no pipeline 2.</span></div>
+          <div class="sat"><span class="sn">audit_events</span><span class="sd">Trilha append-only de acoes (INSERT/UPDATE/DELETE) — governanca e auditoria.</span></div>
+        </div>
+      </div>
+
+      <div class="box" style="border-color:#4b2d55;background:linear-gradient(180deg,#1b1524,#12101a)">
+        <h3><span class="bar" style="background:var(--pink)"></span>Redis — estruturas de apoio</h3>
+        <table class="redis">
+          <tr><td colspan="2" class="grp">Comuns</td></tr>
+          <tr><td class="s" style="color:#7dd3fc">String / JSON</td><td class="u">cache do dashboard com <span class="kbd">TTL</span> (SET/GET EX)</td></tr>
+          <tr><td class="s" style="color:#7dd3fc">Hash</td><td class="u">contadores ao vivo por modelo <span class="kbd">HINCRBY</span></td></tr>
+          <tr><td class="s" style="color:#7dd3fc">Sorted Set</td><td class="u">ranking de entidades por risco <span class="kbd">ZADD/ZREVRANGE</span></td></tr>
+          <tr><td class="s" style="color:#7dd3fc">List</td><td class="u">stream das ultimas predicoes <span class="kbd">LPUSH/LTRIM</span></td></tr>
+          <tr><td class="s" style="color:#7dd3fc">Counter</td><td class="u">rate limit por API key <span class="kbd">INCR + EXPIRE</span></td></tr>
+          <tr><td colspan="2" class="grp">Probabilisticas</td></tr>
+          <tr><td class="s" style="color:#f9a8d4">HyperLogLog</td><td class="u">entidades unicas avaliadas (cardinalidade) <span class="kbd">PFADD/PFCOUNT</span></td></tr>
+          <tr><td class="s" style="color:#f9a8d4">Bloom Filter</td><td class="u">idempotencia por request_id <span class="kbd">BF.ADD/BF.EXISTS</span></td></tr>
+          <tr><td class="s" style="color:#f9a8d4">Count-Min Sketch</td><td class="u">frequencia aprox. por entidade <span class="kbd">CMS.INCRBY/QUERY</span></td></tr>
+          <tr><td class="s" style="color:#f9a8d4">Top-K</td><td class="u">entidades mais avaliadas (heavy hitters) <span class="kbd">TOPK.ADD/LIST</span></td></tr>
+        </table>
+      </div>
+    </aside>
+  </div>
+</body></html>

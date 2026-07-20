@@ -1,0 +1,142 @@
+[
+  {
+    "community": 19,
+    "size": 40,
+    "sample_ids": [
+      "gentity_3c1faa82c82c",
+      "gentity_4a499e6c7d28",
+      "gentity_92cb91dec0f9",
+      "gentity_202997dcdc6f",
+      "gentity_4679bab297c3",
+      "gentity_f6259853a4b3"
+    ],
+    "sample": [
+      "aluno#000",
+      "aluno#001",
+      "aluno#002",
+      "aluno#003",
+      "aluno#004",
+      "aluno#005"
+    ]
+  },
+  {
+    "community": 74,
+    "size": 35,
+    "sample_ids": [
+      "gentity_172341365fb7",
+      "gentity_7deabfcdac85",
+      "gentity_f4fe2b4ebe1a",
+      "gentity_6d710c04cd18",
+      "gentity_935a4c80b94f",
+      "gentity_a07a31ccc98f"
+    ],
+    "sample": [
+      "ativo#000",
+      "ativo#001",
+      "ativo#002",
+      "ativo#003",
+      "ativo#004",
+      "ativo#005"
+    ]
+  },
+  {
+    "community": 99,
+    "size": 32,
+    "sample_ids": [
+      "gentity_5d3268ed2659",
+      "gentity_202fa6c9ed2f",
+      "gentity_73ab3a78dcda",
+      "gentity_fad80c4950a4",
+      "gentity_93f2d6fafec8",
+      "gentity_f4b46a5410d5"
+    ],
+    "sample": [
+      "empresa#000",
+      "empresa#001",
+      "empresa#002",
+      "empresa#003",
+      "empresa#004",
+      "empresa#005"
+    ]
+  },
+  {
+    "community": 167,
+    "size": 32,
+    "sample_ids": [
+      "gentity_21a514d86622",
+      "gentity_33ec0bb9581f",
+      "gentity_c7969fdaa76e",
+      "gentity_a944c8832d1d",
+      "gentity_414548dc91a8",
+      "gentity_0e24a67608f7"
+    ],
+    "sample": [
+      "lote#000",
+      "lote#001",
+      "lote#002",
+      "lote#003",
+      "lote#004",
+      "lote#005"
+    ]
+  },
+  {
+    "community": 228,
+    "size": 32,
+    "sample_ids": [
+      "gentity_9fd9b15015eb",
+      "gentity_7781b4c48b3d",
+      "gentity_c7270d1cd1e6",
+      "gentity_6d111137e1ca",
+      "gentity_a0f8da3dc51e",
+      "gentity_2ac7e5d72fb9"
+    ],
+    "sample": [
+      "chamado#000",
+      "chamado#001",
+      "chamado#002",
+      "chamado#003",
+      "chamado#004",
+      "chamado#005"
+    ]
+  },
+  {
+    "community": 129,
+    "size": 30,
+    "sample_ids": [
+      "gentity_072d57266ebd",
+      "gentity_9888a1348cd4",
+      "gentity_bf8b857e31ae",
+      "gentity_4bcc2580ccb8",
+      "gentity_532699e32606",
+      "gentity_462ad16cd502"
+    ],
+    "sample": [
+      "mercado#000",
+      "mercado#001",
+      "mercado#002",
+      "mercado#003",
+      "mercado#004",
+      "mercado#005"
+    ]
+  },
+  {
+    "community": 196,
+    "size": 30,
+    "sample_ids": [
+      "gentity_c2f19605dfbb",
+      "gentity_e45057ea7a53",
+      "gentity_465c2d7a54c2",
+      "gentity_83f8021c835e",
+      "gentity_cdbef86c3328",
+      "gentity_9f2bc3219cea"
+    ],
+    "sample": [
+      "llm#000",
+      "llm#001",
+      "llm#002",
+      "llm#003",
+      "llm#004",
+      "llm#005"
+    ]
+  }
+]

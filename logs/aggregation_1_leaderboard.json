@@ -1,0 +1,722 @@
+[
+  {
+    "_id": "model_84b83a7b93b4::v2",
+    "model_name": "Random Forest Aprovacao de Lote",
+    "version": "v2",
+    "domain_project_id": "proj_seedquality_price",
+    "confusion": {
+      "tp": 62,
+      "fp": 21,
+      "tn": 30,
+      "fn": 24
+    },
+    "n_with_feedback": 137,
+    "avg_score": 0.5461,
+    "precision": 0.747,
+    "recall": 0.7209,
+    "f1": 0.7337,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_7cd86b55f0be::v1",
+    "model_name": "XGBoost Evasao",
+    "version": "v1",
+    "domain_project_id": "proj_tcc_student_outcomes",
+    "confusion": {
+      "tp": 16,
+      "fp": 9,
+      "tn": 17,
+      "fn": 4
+    },
+    "n_with_feedback": 46,
+    "avg_score": 0.448,
+    "precision": 0.64,
+    "recall": 0.8,
+    "f1": 0.7111,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_5e20343c60c0::v1",
+    "model_name": "Regressao Logistica (baseline)",
+    "version": "v1",
+    "domain_project_id": "proj_seedquality_price",
+    "confusion": {
+      "tp": 17,
+      "fp": 12,
+      "tn": 9,
+      "fn": 3
+    },
+    "n_with_feedback": 41,
+    "avg_score": 0.5922,
+    "precision": 0.5862,
+    "recall": 0.85,
+    "f1": 0.6939,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_6dc8b4816e71::v1",
+    "model_name": "Logistic Full (Radar 12M)",
+    "version": "v1",
+    "domain_project_id": "proj_cnpj_closure_radar",
+    "confusion": {
+      "tp": 13,
+      "fp": 4,
+      "tn": 19,
+      "fn": 8
+    },
+    "n_with_feedback": 44,
+    "avg_score": 0.3343,
+    "precision": 0.7647,
+    "recall": 0.619,
+    "f1": 0.6842,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_5e20343c60c0::v2",
+    "model_name": "Regressao Logistica (baseline)",
+    "version": "v2",
+    "domain_project_id": "proj_seedquality_price",
+    "confusion": {
+      "tp": 45,
+      "fp": 28,
+      "tn": 34,
+      "fn": 30
+    },
+    "n_with_feedback": 137,
+    "avg_score": 0.5429,
+    "precision": 0.6164,
+    "recall": 0.6,
+    "f1": 0.6081,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_a5bb33702e7b::v2",
+    "model_name": "XGBoost Aprovacao de Lote",
+    "version": "v2",
+    "domain_project_id": "proj_seedquality_price",
+    "confusion": {
+      "tp": 50,
+      "fp": 39,
+      "tn": 26,
+      "fn": 29
+    },
+    "n_with_feedback": 144,
+    "avg_score": 0.5484,
+    "precision": 0.5618,
+    "recall": 0.6329,
+    "f1": 0.5952,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_60020e47af26::v2",
+    "model_name": "Regressao Logistica (baseline)",
+    "version": "v2",
+    "domain_project_id": "proj_tcc_student_outcomes",
+    "confusion": {
+      "tp": 41,
+      "fp": 35,
+      "tn": 50,
+      "fn": 24
+    },
+    "n_with_feedback": 150,
+    "avg_score": 0.4327,
+    "precision": 0.5395,
+    "recall": 0.6308,
+    "f1": 0.5816,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_84b83a7b93b4::v1",
+    "model_name": "Random Forest Aprovacao de Lote",
+    "version": "v1",
+    "domain_project_id": "proj_seedquality_price",
+    "confusion": {
+      "tp": 15,
+      "fp": 16,
+      "tn": 14,
+      "fn": 6
+    },
+    "n_with_feedback": 51,
+    "avg_score": 0.5567,
+    "precision": 0.4839,
+    "recall": 0.7143,
+    "f1": 0.5769,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_a5bb33702e7b::v1",
+    "model_name": "XGBoost Aprovacao de Lote",
+    "version": "v1",
+    "domain_project_id": "proj_seedquality_price",
+    "confusion": {
+      "tp": 17,
+      "fp": 15,
+      "tn": 4,
+      "fn": 10
+    },
+    "n_with_feedback": 46,
+    "avg_score": 0.6139,
+    "precision": 0.5312,
+    "recall": 0.6296,
+    "f1": 0.5763,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_83f15d9409ba::v2",
+    "model_name": "CatBoost Evasao",
+    "version": "v2",
+    "domain_project_id": "proj_tcc_student_outcomes",
+    "confusion": {
+      "tp": 31,
+      "fp": 27,
+      "tn": 52,
+      "fn": 35
+    },
+    "n_with_feedback": 145,
+    "avg_score": 0.4303,
+    "precision": 0.5345,
+    "recall": 0.4697,
+    "f1": 0.5,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_53933cbd16ba::v1",
+    "model_name": "XGBoost Radar 12M",
+    "version": "v1",
+    "domain_project_id": "proj_cnpj_closure_radar",
+    "confusion": {
+      "tp": 10,
+      "fp": 11,
+      "tn": 20,
+      "fn": 10
+    },
+    "n_with_feedback": 51,
+    "avg_score": 0.3539,
+    "precision": 0.4762,
+    "recall": 0.5,
+    "f1": 0.4878,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_7cd86b55f0be::v2",
+    "model_name": "XGBoost Evasao",
+    "version": "v2",
+    "domain_project_id": "proj_tcc_student_outcomes",
+    "confusion": {
+      "tp": 27,
+      "fp": 24,
+      "tn": 54,
+      "fn": 33
+    },
+    "n_with_feedback": 138,
+    "avg_score": 0.408,
+    "precision": 0.5294,
+    "recall": 0.45,
+    "f1": 0.4865,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_53933cbd16ba::v2",
+    "model_name": "XGBoost Radar 12M",
+    "version": "v2",
+    "domain_project_id": "proj_cnpj_closure_radar",
+    "confusion": {
+      "tp": 20,
+      "fp": 23,
+      "tn": 69,
+      "fn": 23
+    },
+    "n_with_feedback": 135,
+    "avg_score": 0.307,
+    "precision": 0.4651,
+    "recall": 0.4651,
+    "f1": 0.4651,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_b632709a8df6::v1",
+    "model_name": "Prophet (risco de ruptura)",
+    "version": "v1",
+    "domain_project_id": "proj_seeddemand_forecast",
+    "confusion": {
+      "tp": 6,
+      "fp": 2,
+      "tn": 34,
+      "fn": 12
+    },
+    "n_with_feedback": 54,
+    "avg_score": 0.3157,
+    "precision": 0.75,
+    "recall": 0.3333,
+    "f1": 0.4615,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_0cd2b2c541ef::v1",
+    "model_name": "Benchmark Tier Classifier",
+    "version": "v1",
+    "domain_project_id": "proj_llms_microscope",
+    "confusion": {
+      "tp": 6,
+      "fp": 2,
+      "tn": 25,
+      "fn": 12
+    },
+    "n_with_feedback": 45,
+    "avg_score": 0.323,
+    "precision": 0.75,
+    "recall": 0.3333,
+    "f1": 0.4615,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_80dc19d681b9::v2",
+    "model_name": "LightGBM Radar 12M",
+    "version": "v2",
+    "domain_project_id": "proj_cnpj_closure_radar",
+    "confusion": {
+      "tp": 21,
+      "fp": 32,
+      "tn": 76,
+      "fn": 20
+    },
+    "n_with_feedback": 149,
+    "avg_score": 0.3253,
+    "precision": 0.3962,
+    "recall": 0.5122,
+    "f1": 0.4468,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_9fcee7f16bae::v2",
+    "model_name": "Metadata Performance Model",
+    "version": "v2",
+    "domain_project_id": "proj_llms_microscope",
+    "confusion": {
+      "tp": 17,
+      "fp": 16,
+      "tn": 71,
+      "fn": 29
+    },
+    "n_with_feedback": 133,
+    "avg_score": 0.3513,
+    "precision": 0.5152,
+    "recall": 0.3696,
+    "f1": 0.4304,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_60020e47af26::v1",
+    "model_name": "Regressao Logistica (baseline)",
+    "version": "v1",
+    "domain_project_id": "proj_tcc_student_outcomes",
+    "confusion": {
+      "tp": 7,
+      "fp": 12,
+      "tn": 17,
+      "fn": 8
+    },
+    "n_with_feedback": 44,
+    "avg_score": 0.4318,
+    "precision": 0.3684,
+    "recall": 0.4667,
+    "f1": 0.4118,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_ab5a51b65025::v1",
+    "model_name": "Don't Go CatBoost (comparativo)",
+    "version": "v1",
+    "domain_project_id": "proj_vale_dontgo_maintenance",
+    "confusion": {
+      "tp": 4,
+      "fp": 3,
+      "tn": 33,
+      "fn": 9
+    },
+    "n_with_feedback": 49,
+    "avg_score": 0.296,
+    "precision": 0.5714,
+    "recall": 0.3077,
+    "f1": 0.4,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_6dc8b4816e71::v2",
+    "model_name": "Logistic Full (Radar 12M)",
+    "version": "v2",
+    "domain_project_id": "proj_cnpj_closure_radar",
+    "confusion": {
+      "tp": 20,
+      "fp": 38,
+      "tn": 56,
+      "fn": 29
+    },
+    "n_with_feedback": 143,
+    "avg_score": 0.3327,
+    "precision": 0.3448,
+    "recall": 0.4082,
+    "f1": 0.3738,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_8f80c330e3c8::v2",
+    "model_name": "Don't Go LightGBM (multi-horizonte)",
+    "version": "v2",
+    "domain_project_id": "proj_vale_dontgo_maintenance",
+    "confusion": {
+      "tp": 12,
+      "fp": 9,
+      "tn": 88,
+      "fn": 32
+    },
+    "n_with_feedback": 141,
+    "avg_score": 0.2915,
+    "precision": 0.5714,
+    "recall": 0.2727,
+    "f1": 0.3692,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_4fd75a0270ce::v2",
+    "model_name": "SARIMA (risco de ruptura)",
+    "version": "v2",
+    "domain_project_id": "proj_seeddemand_forecast",
+    "confusion": {
+      "tp": 13,
+      "fp": 14,
+      "tn": 83,
+      "fn": 31
+    },
+    "n_with_feedback": 141,
+    "avg_score": 0.3453,
+    "precision": 0.4815,
+    "recall": 0.2955,
+    "f1": 0.3662,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_0cd2b2c541ef::v2",
+    "model_name": "Benchmark Tier Classifier",
+    "version": "v2",
+    "domain_project_id": "proj_llms_microscope",
+    "confusion": {
+      "tp": 12,
+      "fp": 11,
+      "tn": 89,
+      "fn": 31
+    },
+    "n_with_feedback": 143,
+    "avg_score": 0.2923,
+    "precision": 0.5217,
+    "recall": 0.2791,
+    "f1": 0.3636,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_83f15d9409ba::v1",
+    "model_name": "CatBoost Evasao",
+    "version": "v1",
+    "domain_project_id": "proj_tcc_student_outcomes",
+    "confusion": {
+      "tp": 4,
+      "fp": 5,
+      "tn": 19,
+      "fn": 10
+    },
+    "n_with_feedback": 38,
+    "avg_score": 0.3168,
+    "precision": 0.4444,
+    "recall": 0.2857,
+    "f1": 0.3478,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_88da43d627b9::v2",
+    "model_name": "SLA Breach (HistGradientBoosting)",
+    "version": "v2",
+    "domain_project_id": "proj_itsm_sla_breach",
+    "confusion": {
+      "tp": 9,
+      "fp": 8,
+      "tn": 83,
+      "fn": 26
+    },
+    "n_with_feedback": 126,
+    "avg_score": 0.2552,
+    "precision": 0.5294,
+    "recall": 0.2571,
+    "f1": 0.3462,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_88da43d627b9::v1",
+    "model_name": "SLA Breach (HistGradientBoosting)",
+    "version": "v1",
+    "domain_project_id": "proj_itsm_sla_breach",
+    "confusion": {
+      "tp": 2,
+      "fp": 6,
+      "tn": 34,
+      "fn": 2
+    },
+    "n_with_feedback": 44,
+    "avg_score": 0.2538,
+    "precision": 0.25,
+    "recall": 0.5,
+    "f1": 0.3333,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_ab5a51b65025::v2",
+    "model_name": "Don't Go CatBoost (comparativo)",
+    "version": "v2",
+    "domain_project_id": "proj_vale_dontgo_maintenance",
+    "confusion": {
+      "tp": 9,
+      "fp": 9,
+      "tn": 78,
+      "fn": 29
+    },
+    "n_with_feedback": 125,
+    "avg_score": 0.2984,
+    "precision": 0.5,
+    "recall": 0.2368,
+    "f1": 0.3214,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_49734d526510::v2",
+    "model_name": "Outlier Risk Detector",
+    "version": "v2",
+    "domain_project_id": "proj_llms_microscope",
+    "confusion": {
+      "tp": 12,
+      "fp": 19,
+      "tn": 73,
+      "fn": 36
+    },
+    "n_with_feedback": 140,
+    "avg_score": 0.3345,
+    "precision": 0.3871,
+    "recall": 0.25,
+    "f1": 0.3038,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_da708bae0ef1::v2",
+    "model_name": "LSTM (clima + demanda)",
+    "version": "v2",
+    "domain_project_id": "proj_seeddemand_forecast",
+    "confusion": {
+      "tp": 11,
+      "fp": 14,
+      "tn": 77,
+      "fn": 37
+    },
+    "n_with_feedback": 139,
+    "avg_score": 0.3306,
+    "precision": 0.44,
+    "recall": 0.2292,
+    "f1": 0.3014,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_9fcee7f16bae::v1",
+    "model_name": "Metadata Performance Model",
+    "version": "v1",
+    "domain_project_id": "proj_llms_microscope",
+    "confusion": {
+      "tp": 4,
+      "fp": 8,
+      "tn": 22,
+      "fn": 11
+    },
+    "n_with_feedback": 45,
+    "avg_score": 0.3542,
+    "precision": 0.3333,
+    "recall": 0.2667,
+    "f1": 0.2963,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_da708bae0ef1::v1",
+    "model_name": "LSTM (clima + demanda)",
+    "version": "v1",
+    "domain_project_id": "proj_seeddemand_forecast",
+    "confusion": {
+      "tp": 3,
+      "fp": 2,
+      "tn": 29,
+      "fn": 14
+    },
+    "n_with_feedback": 48,
+    "avg_score": 0.276,
+    "precision": 0.6,
+    "recall": 0.1765,
+    "f1": 0.2727,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_94d51300e359::v1",
+    "model_name": "Don't Go XGBoost (comparativo)",
+    "version": "v1",
+    "domain_project_id": "proj_vale_dontgo_maintenance",
+    "confusion": {
+      "tp": 4,
+      "fp": 7,
+      "tn": 33,
+      "fn": 15
+    },
+    "n_with_feedback": 59,
+    "avg_score": 0.3432,
+    "precision": 0.3636,
+    "recall": 0.2105,
+    "f1": 0.2667,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_4fd75a0270ce::v1",
+    "model_name": "SARIMA (risco de ruptura)",
+    "version": "v1",
+    "domain_project_id": "proj_seeddemand_forecast",
+    "confusion": {
+      "tp": 3,
+      "fp": 5,
+      "tn": 25,
+      "fn": 12
+    },
+    "n_with_feedback": 45,
+    "avg_score": 0.3272,
+    "precision": 0.375,
+    "recall": 0.2,
+    "f1": 0.2609,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_49734d526510::v1",
+    "model_name": "Outlier Risk Detector",
+    "version": "v1",
+    "domain_project_id": "proj_llms_microscope",
+    "confusion": {
+      "tp": 3,
+      "fp": 4,
+      "tn": 30,
+      "fn": 14
+    },
+    "n_with_feedback": 51,
+    "avg_score": 0.3034,
+    "precision": 0.4286,
+    "recall": 0.1765,
+    "f1": 0.25,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_b632709a8df6::v2",
+    "model_name": "Prophet (risco de ruptura)",
+    "version": "v2",
+    "domain_project_id": "proj_seeddemand_forecast",
+    "confusion": {
+      "tp": 7,
+      "fp": 10,
+      "tn": 79,
+      "fn": 33
+    },
+    "n_with_feedback": 129,
+    "avg_score": 0.3169,
+    "precision": 0.4118,
+    "recall": 0.175,
+    "f1": 0.2456,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_80dc19d681b9::v1",
+    "model_name": "LightGBM Radar 12M",
+    "version": "v1",
+    "domain_project_id": "proj_cnpj_closure_radar",
+    "confusion": {
+      "tp": 2,
+      "fp": 8,
+      "tn": 20,
+      "fn": 11
+    },
+    "n_with_feedback": 41,
+    "avg_score": 0.2834,
+    "precision": 0.2,
+    "recall": 0.1538,
+    "f1": 0.1739,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_2b222e25067e::v2",
+    "model_name": "SLA Breach (baseline logistico)",
+    "version": "v2",
+    "domain_project_id": "proj_itsm_sla_breach",
+    "confusion": {
+      "tp": 5,
+      "fp": 14,
+      "tn": 83,
+      "fn": 34
+    },
+    "n_with_feedback": 136,
+    "avg_score": 0.2396,
+    "precision": 0.2632,
+    "recall": 0.1282,
+    "f1": 0.1724,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_94d51300e359::v2",
+    "model_name": "Don't Go XGBoost (comparativo)",
+    "version": "v2",
+    "domain_project_id": "proj_vale_dontgo_maintenance",
+    "confusion": {
+      "tp": 4,
+      "fp": 9,
+      "tn": 87,
+      "fn": 38
+    },
+    "n_with_feedback": 138,
+    "avg_score": 0.2734,
+    "precision": 0.3077,
+    "recall": 0.0952,
+    "f1": 0.1455,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_2b222e25067e::v1",
+    "model_name": "SLA Breach (baseline logistico)",
+    "version": "v1",
+    "domain_project_id": "proj_itsm_sla_breach",
+    "confusion": {
+      "tp": 1,
+      "fp": 6,
+      "tn": 26,
+      "fn": 6
+    },
+    "n_with_feedback": 39,
+    "avg_score": 0.2231,
+    "precision": 0.1429,
+    "recall": 0.1429,
+    "f1": 0.1429,
+    "computed_at": "2026-07-13T12:00:00Z"
+  },
+  {
+    "_id": "model_8f80c330e3c8::v1",
+    "model_name": "Don't Go LightGBM (multi-horizonte)",
+    "version": "v1",
+    "domain_project_id": "proj_vale_dontgo_maintenance",
+    "confusion": {
+      "tp": 0,
+      "fp": 1,
+      "tn": 24,
+      "fn": 9
+    },
+    "n_with_feedback": 34,
+    "avg_score": 0.2487,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0,
+    "computed_at": "2026-07-13T12:00:00Z"
+  }
+]

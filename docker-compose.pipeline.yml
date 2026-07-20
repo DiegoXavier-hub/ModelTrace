@@ -1,0 +1,38 @@
+# Infra minima para o pipeline NoSQL: MongoDB + Redis Stack (com RedisBloom) + Neo4j (GDS).
+# As portas 27018/6380/7475/7688 evitam conflito com instancias ja em uso na maquina.
+#
+#   docker compose -f docs/pipeline/docker-compose.pipeline.yml up -d
+#
+services:
+  mongo:
+    image: mongo:7
+    container_name: mt-mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mt_mongo_data:/data/db
+
+  redis:
+    # redis-stack-server inclui o modulo RedisBloom (Bloom, Count-Min, Top-K).
+    image: redis/redis-stack-server:latest
+    container_name: mt-redis
+    ports:
+      - "6380:6379"
+
+  neo4j:
+    # Neo4j Community + plugin Graph Data Science (GDS) para o grafo de conhecimento.
+    image: neo4j:5.26-community
+    container_name: mt-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/modeltrace123
+      NEO4J_PLUGINS: '["graph-data-science"]'
+      NEO4J_dbms_security_procedures_unrestricted: gds.*
+    ports:
+      - "7475:7474" # Neo4j Browser (HTTP)
+      - "7688:7687" # Bolt
+    volumes:
+      - mt_neo4j_data:/data
+
+volumes:
+  mt_mongo_data:
+  mt_neo4j_data:

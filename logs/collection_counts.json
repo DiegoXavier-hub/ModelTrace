@@ -1,0 +1,11 @@
+{
+  "organizations": 1,
+  "users": 2,
+  "projects": 7,
+  "models": 20,
+  "model_versions": 40,
+  "predictions": 5200,
+  "metrics_snapshots": 40,
+  "entity_notes": 42,
+  "audit_events": 2
+}

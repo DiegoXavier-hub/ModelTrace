@@ -1,0 +1,7 @@
+# Dependencias do pipeline NoSQL
+pymongo==4.9.2
+redis==8.0.1
+neo4j==5.27.0
+streamlit==1.41.1
+pandas==2.3.3
+constelario>=0.3.0

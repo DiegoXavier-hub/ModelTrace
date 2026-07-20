@@ -1,0 +1,150 @@
+{
+  "database": "modeltrace",
+  "version": "simplificada",
+  "style": "document_database",
+  "storage_targets": ["JSON local", "MongoDB"],
+  "tenant_key": "org_id",
+  "description": "Modelo resumido com as colecoes essenciais para operar projetos, modelos, versoes, predicoes, metricas, alertas e auditoria.",
+  "collections": {
+    "organizations": {
+      "primary_key": "_id",
+      "purpose": "Tenant principal da plataforma.",
+      "required_fields": ["_id", "name", "plan", "owner_id", "settings", "status", "created_at"],
+      "references": {
+        "owner_id": "users._id"
+      }
+    },
+    "users": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Usuarios, perfil, preferencias e credenciais protegidas.",
+      "required_fields": ["_id", "org_id", "name", "email_hash", "email_encrypted", "password_hash", "role", "preferences", "status", "created_at"],
+      "references": {
+        "org_id": "organizations._id"
+      }
+    },
+    "projects": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Produto ou caso de uso de ML dentro da organizacao.",
+      "required_fields": ["_id", "org_id", "name", "domain", "problem_type", "owner_id", "settings", "stats", "status", "created_at"],
+      "embedded_documents": {
+        "settings": ["default_threshold", "positive_label", "negative_label", "retention_days", "data_contract_mode"],
+        "stats": ["total_predictions", "total_models", "active_alerts", "last_prediction_at"]
+      },
+      "references": {
+        "org_id": "organizations._id",
+        "owner_id": "users._id"
+      }
+    },
+    "models": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Cadastro logico do modelo e contrato esperado de features.",
+      "required_fields": ["_id", "org_id", "project_id", "name", "problem_type", "target_name", "labels", "default_threshold", "expected_features", "status", "created_at"],
+      "references": {
+        "org_id": "organizations._id",
+        "project_id": "projects._id",
+        "production_version_id": "model_versions._id"
+      }
+    },
+    "model_versions": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Versoes treinadas/promovidas de cada modelo.",
+      "required_fields": ["_id", "org_id", "project_id", "model_id", "version", "algorithm", "status", "features", "offline_metrics", "created_at"],
+      "references": {
+        "org_id": "organizations._id",
+        "project_id": "projects._id",
+        "model_id": "models._id"
+      }
+    },
+    "predictions": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Documento central: guarda a decisao completa de ML e os dados variaveis de entrada.",
+      "required_fields": ["_id", "org_id", "project_id", "model_id", "model_version_id", "model_version", "entity", "features", "prediction", "decision", "feedback", "metadata", "created_at"],
+      "embedded_documents": {
+        "entity": ["id_hash", "id_encrypted", "type", "display_name_encrypted"],
+        "features": "mapa livre por modelo",
+        "prediction": ["label", "score", "threshold", "above_threshold", "score_band"],
+        "explanations": "lista de impactos por feature",
+        "decision": ["action", "status", "reason", "triggered_at"],
+        "feedback": ["available", "observed_label", "observed_value", "classification_result", "received_at", "source"],
+        "flags": ["is_critical", "reviewed_by", "reviewed_at", "contract_status"],
+        "metadata": ["source_system", "environment", "request_id", "contract"]
+      },
+      "references": {
+        "org_id": "organizations._id",
+        "project_id": "projects._id",
+        "model_id": "models._id",
+        "model_version_id": "model_versions._id"
+      }
+    },
+    "metrics_snapshots": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Agregados materializados de performance por modelo, versao e periodo.",
+      "required_fields": ["_id", "org_id", "project_id", "model_id", "model_version", "period", "counts", "performance", "confusion_matrix", "score_distribution", "computed_at"],
+      "references": {
+        "project_id": "projects._id",
+        "model_id": "models._id"
+      }
+    },
+    "alerts": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Alertas operacionais gerados por regras ou jobs.",
+      "required_fields": ["_id", "org_id", "project_id", "model_id", "rule_id", "type", "severity", "status", "message", "metric", "observed_value", "threshold", "created_at"],
+      "references": {
+        "project_id": "projects._id",
+        "model_id": "models._id",
+        "rule_id": "alert_rules._id"
+      }
+    },
+    "api_keys": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Credenciais de ingestao por projeto, armazenadas apenas como hash.",
+      "required_fields": ["_id", "org_id", "project_id", "name", "prefix", "key_hash", "hash_algorithm", "scopes", "status", "created_at"],
+      "references": {
+        "project_id": "projects._id",
+        "created_by": "users._id"
+      }
+    },
+    "audit_events": {
+      "primary_key": "_id",
+      "tenant_key": "org_id",
+      "purpose": "Trilha append-only de acoes relevantes.",
+      "required_fields": ["_id", "org_id", "project_id", "actor", "event_type", "resource", "context", "created_at"],
+      "references": {
+        "org_id": "organizations._id",
+        "project_id": "projects._id"
+      }
+    }
+  },
+  "relationship_summary": [
+    { "from": "organizations", "to": "users", "type": "1:N", "key": "org_id" },
+    { "from": "organizations", "to": "projects", "type": "1:N", "key": "org_id" },
+    { "from": "projects", "to": "models", "type": "1:N", "key": "project_id" },
+    { "from": "models", "to": "model_versions", "type": "1:N", "key": "model_id" },
+    { "from": "projects", "to": "predictions", "type": "1:N", "key": "project_id" },
+    { "from": "models", "to": "predictions", "type": "1:N", "key": "model_id" },
+    { "from": "model_versions", "to": "predictions", "type": "1:N", "key": "model_version_id" },
+    { "from": "models", "to": "metrics_snapshots", "type": "1:N", "key": "model_id" },
+    { "from": "projects", "to": "alerts", "type": "1:N", "key": "project_id" },
+    { "from": "projects", "to": "api_keys", "type": "1:N", "key": "project_id" },
+    { "from": "projects", "to": "audit_events", "type": "1:N", "key": "project_id" }
+  ],
+  "main_indexes": [
+    { "collection": "users", "fields": ["org_id", "email_hash"], "unique": true },
+    { "collection": "api_keys", "fields": ["key_hash"], "unique": true, "sparse": true },
+    { "collection": "predictions", "fields": ["org_id", "project_id", "created_at"] },
+    { "collection": "predictions", "fields": ["model_id", "model_version", "created_at"] },
+    { "collection": "predictions", "fields": ["entity.id_hash", "project_id", "created_at"] },
+    { "collection": "predictions", "fields": ["metadata.request_id"], "unique": true, "sparse": true },
+    { "collection": "metrics_snapshots", "fields": ["model_id", "period.granularity", "period.start"] },
+    { "collection": "alerts", "fields": ["project_id", "status", "severity", "created_at"] },
+    { "collection": "audit_events", "fields": ["project_id", "created_at"] }
+  ]
+}

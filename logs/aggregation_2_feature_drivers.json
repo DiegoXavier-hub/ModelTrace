@@ -1,0 +1,65 @@
+{
+  "drivers": [
+    {
+      "avg_impact": 0.1527,
+      "times_top_driver": 14,
+      "occurrences": 56,
+      "feature": "pct_ch_concluida"
+    },
+    {
+      "avg_impact": 0.1524,
+      "times_top_driver": 17,
+      "occurrences": 56,
+      "feature": "cotista"
+    },
+    {
+      "avg_impact": 0.1515,
+      "times_top_driver": 17,
+      "occurrences": 45,
+      "feature": "ch_acumulada"
+    },
+    {
+      "avg_impact": 0.1491,
+      "times_top_driver": 50,
+      "occurrences": 175,
+      "feature": "taxa_aprovacao"
+    },
+    {
+      "avg_impact": 0.147,
+      "times_top_driver": 33,
+      "occurrences": 90,
+      "feature": "qtd_reprovacoes"
+    }
+  ],
+  "audit_sample": [
+    {
+      "_id": "pred_8d2d5c6de98a",
+      "entity_id": "entity_037d9c89eb28",
+      "score": 0.5397,
+      "label": "high_risk",
+      "top_driver": "curso_origem",
+      "note_count": 0
+    },
+    {
+      "_id": "pred_ce037c263c39",
+      "entity_id": "entity_4a87c5f83d36",
+      "score": 0.5708,
+      "label": "high_risk",
+      "top_driver": "qtd_aprovacoes",
+      "note_count": 0
+    },
+    {
+      "_id": "pred_739ad8f9a2df",
+      "entity_id": "entity_9e3d79ef9ce3",
+      "score": 0.5213,
+      "label": "high_risk",
+      "top_driver": "taxa_aprovacao",
+      "note_count": 0
+    }
+  ],
+  "universe": [
+    {
+      "high_risk_total": 279
+    }
+  ]
+}

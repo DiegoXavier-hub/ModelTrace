@@ -1,0 +1,328 @@
+
+==============================================================================
+FASE 0 - CONEXAO
+==============================================================================
+  -> MongoDB conectado: mongodb://localhost:27018 (db=modeltrace_pipeline) v7.0.37
+  -> Redis conectado:   localhost:6380
+
+==============================================================================
+FASE 1 - CRIAR PRINCIPAIS COLECOES (+ INDICES)
+==============================================================================
+  -> Banco 'modeltrace_pipeline' recriado do zero (drop_database).
+  -> 9 colecoes criadas: organizations, users, projects, models, model_versions, predictions, metrics_snapshots, entity_notes, audit_events
+  -> Indices criados (inclui unique em users.email_hash e predictions.metadata.request_id).
+  -> Redis probabilistico reservado: Bloom (seen_requests), Count-Min (entity_freq), Top-K (top_entities).
+
+==============================================================================
+FASE 2 - POPULAR DADOS DE REFERENCIA (org, users, projects, models, versions)
+==============================================================================
+  -> Populado: 1 organization, 2 users, 3 projects, 4 models, 8 model_versions.
+
+==============================================================================
+FASE 3 - POPULAR PREDICOES (insert_many) + INGESTAO NO REDIS
+==============================================================================
+  -> 1040 predicoes inseridas (insert_many) e replicadas no Redis.
+  -> 18 entity_notes inseridas (para demonstrar $lookup no pipeline 2).
+
+==============================================================================
+FASE 4 - CRUD DAS PRINCIPAIS COLECOES: INSERT / FIND / UPDATE / DELETE
+==============================================================================
+  -> INSERT: nova predicao manual (com idempotencia via Bloom Filter)
+     resultado 1a insercao: {'status': 'inserted', 'prediction_id': 'pred_f47afcedf23f'}
+     resultado 2a insercao (duplicada): {'status': 'duplicate_skipped', 'request_id': 'manual_demo_0001'}
+  -> FIND one: recupera a predicao inserida
+{
+  "_id": "pred_f47afcedf23f",
+  "entity": "entity_5c837cd9f137",
+  "prediction": {
+    "label": "high_risk",
+    "score": 0.5508,
+    "threshold": 0.5,
+    "above_threshold": true,
+    "score_band": "high"
+  },
+  "feedback": {
+    "available": false
+  }
+}
+  -> FIND many: top 5 predicoes de maior score no projeto (com projecao + sort)
+[
+  {
+    "_id": "pred_4937be71cddf",
+    "entity": {
+      "id": "entity_4e01dd41bf45"
+    },
+    "prediction": {
+      "label": "high_risk",
+      "score": 1.0
+    },
+    "feedback": {
+      "classification_result": "tp"
+    },
+    "created_at": "2026-06-20T14:00:00Z"
+  },
+  {
+    "_id": "pred_8f258dc2044f",
+    "entity": {
+      "id": "entity_124bca4fc35f"
+    },
+    "prediction": {
+      "label": "high_risk",
+      "score": 1.0
+    },
+    "feedback": {
+      "classification_result": "tp"
+    },
+    "created_at": "2026-06-20T18:00:00Z"
+  },
+  {
+    "_id": "pred_68e84b380700",
+    "entity": {
+      "id": "entity_2919cade061a"
+    },
+    "prediction": {
+      "label": "high_risk",
+      "score": 1.0
+    },
+    "feedback": {
+      "classification_result": "tp"
+    },
+    "created_at": "2026-07-06T02:00:00Z"
+  },
+  {
+    "_id": "pred_b897efb5adda",
+    "entity": {
+      "id": "entity_3e4f1c001ac6"
+    },
+    "prediction": {
+      "label": "high_risk",
+      "score": 1.0
+    },
+    "feedback": {},
+    "created_at": "2026-07-13T05:00:00Z"
+  },
+  {
+    "_id": "pred_3618c21e3d55",
+    "entity": {
+      "id": "entity_ab2767ab69e5"
+    },
+    "prediction": {
+      "label": "high_risk",
+      "score": 0.9878
+    },
+    "feedback": {
+      "classification_result": "tp"
+    },
+    "created_at": "2026-06-26T17:00:00Z"
+  }
+]
+  -> UPDATE one: anexa feedback real (observed_value=1) e recalcula a matriz
+     update ok: True | feedback agora: tp
+  -> UPDATE many: marca predicoes criticas (score >= 0.85) como escaladas
+     predicoes escaladas: 24
+  -> DELETE one: remove a predicao de demonstracao
+     deletada: True
+  -> DELETE many: expurgo de predicoes de teste sinteticas antigas (nenhuma aqui)
+     removidas por filtro de retencao: 0
+
+==============================================================================
+FASE 5 - AGGREGATION PIPELINE 1: LEADERBOARD DE MODELOS (match/group/set/lookup/unwind/project/sort/merge)
+==============================================================================
+  F1=0.7037  P=0.7308  R=0.6786  n=43    TCC GI RandomForest [v1] conf={'tp': 19, 'fp': 7, 'tn': 8, 'fn': 9}
+  F1=0.6202  P=0.6349  R=0.6061  n=130   TCC GI XGBoost [v2] conf={'tp': 40, 'fp': 23, 'tn': 41, 'fn': 26}
+  F1=0.6135  P=0.5952  R=0.6329  n=149   TCC GI RandomForest [v2] conf={'tp': 50, 'fp': 34, 'tn': 36, 'fn': 29}
+  F1=0.549   P=0.5185  R=0.5833  n=51    TCC GI XGBoost [v1] conf={'tp': 14, 'fp': 13, 'tn': 14, 'fn': 10}
+  F1=0.3636  P=0.4286  R=0.3158  n=53    Closure Risk XGB [v1] conf={'tp': 6, 'fp': 8, 'tn': 26, 'fn': 13}
+  F1=0.339   P=0.4545  R=0.2703  n=142   DontGo Event Risk [v2] conf={'tp': 10, 'fp': 12, 'tn': 93, 'fn': 27}
+  F1=0.3333  P=0.5556  R=0.2381  n=46    DontGo Event Risk [v1] conf={'tp': 5, 'fp': 4, 'tn': 21, 'fn': 16}
+  F1=0.3023  P=0.4643  R=0.2241  n=147   Closure Risk XGB [v2] conf={'tp': 13, 'fp': 15, 'tn': 74, 'fn': 45}
+
+==============================================================================
+FASE 6 - AGGREGATION PIPELINE 2: DRIVERS DE RISCO (match/facet/unwind/group/sort/limit/sample/lookup/project/count)
+==============================================================================
+  Universo de risco alto: [{'high_risk_total': 280}]
+  Top features que dirigem o risco:
+    - taxa_aprovacao       impacto_medio=0.1567   top_driver_em=44 ocorrencias=157
+    - qtd_reprovacoes      impacto_medio=0.1544   top_driver_em=58 ocorrencias=173
+    - delta_nota           impacto_medio=0.1524   top_driver_em=43 ocorrencias=174
+    - nota_media           impacto_medio=0.1513   top_driver_em=70 ocorrencias=167
+    - tipo_ingresso        impacto_medio=0.1468   top_driver_em=65 ocorrencias=169
+  Amostra auditavel aleatoria ($sample):
+    - entity_dc1a8fedbd74 score=0.5112 label=high_risk top=qtd_reprovacoes
+    - entity_8e295b76ff92 score=0.5868 label=high_risk top=taxa_aprovacao
+    - entity_23ecd973c172 score=0.7355 label=high_risk top=delta_nota
+
+==============================================================================
+FASE 7 - REDIS: ESTRUTURAS COMUNS (String cache, Hash, Sorted Set, List, Counter)
+==============================================================================
+  -> String cache do dashboard com TTL (SET/GET)
+     cache lido de volta: {'total_predictions': 1040, 'generated_at': '2026-07-13T12:00:00Z'}
+  -> Counter + EXPIRE: rate limit de uma API key (limite=5/60s)
+     permissoes das 7 chamadas: [True, True, True, True, True, False, False]
+
+  --- Estruturas COMUNS ---
+{
+  "hash_counters_by_model": {
+    "model_ef426ee9ab87": {
+      "predictions": "260",
+      "positives": "44",
+      "with_feedback": "188"
+    },
+    "model_30cfb2a90607": {
+      "predictions": "261",
+      "positives": "135",
+      "with_feedback": "181"
+    },
+    "model_5ee1fdbb6985": {
+      "predictions": "260",
+      "positives": "146",
+      "with_feedback": "192"
+    },
+    "model_d1962bfb96ed": {
+      "predictions": "260",
+      "with_feedback": "200",
+      "positives": "56"
+    }
+  },
+  "sorted_set_top_risk": {
+    "proj_cnpj_closure_radar": [
+      [
+        "entity_78b63069208a",
+        0.9005
+      ],
+      [
+        "entity_2c3e26396a34",
+        0.8135
+      ],
+      [
+        "entity_d66e2546662d",
+        0.7991
+      ],
+      [
+        "entity_bee5800550d2",
+        0.7867
+      ],
+      [
+        "entity_bd5e6636c27b",
+        0.7742
+      ]
+    ],
+    "proj_vale_predictive_maintenance": [
+      [
+        "entity_c6f632d0a3ae",
+        0.795
+      ],
+      [
+        "entity_5ae2230a591d",
+        0.7547
+      ],
+      [
+        "entity_ae43be72fab7",
+        0.7179
+      ],
+      [
+        "entity_8822d1d34e39",
+        0.6979
+      ],
+      [
+        "entity_789fd2327e30",
+        0.6734
+      ]
+    ],
+    "proj_tcc_student_outcomes": [
+      [
+        "entity_4e01dd41bf45",
+        1.0
+      ],
+      [
+        "entity_3e4f1c001ac6",
+        1.0
+      ],
+      [
+        "entity_2919cade061a",
+        1.0
+      ],
+      [
+        "entity_124bca4fc35f",
+        1.0
+      ],
+      [
+        "entity_ab2767ab69e5",
+        0.9878
+      ]
+    ]
+  },
+  "list_recent_stream": [
+    {
+      "entity": "entity_23a6422c1f35",
+      "score": 0.2579,
+      "label": "normal_operation"
+    },
+    {
+      "entity": "entity_0cf44a5a0f6a",
+      "score": 0.088,
+      "label": "normal_operation"
+    },
+    {
+      "entity": "entity_8daa12291f59",
+      "score": 0.0362,
+      "label": "normal_operation"
+    }
+  ],
+  "string_cache_keys": [
+    "mt:cache:dashboard:overview"
+  ]
+}
+
+==============================================================================
+FASE 8 - REDIS: ESTRUTURAS PROBABILISTICAS (HyperLogLog, Bloom, Count-Min, Top-K)
+==============================================================================
+{
+  "hyperloglog_unique_entities": {
+    "model_ef426ee9ab87": 65,
+    "model_d1962bfb96ed": 65,
+    "model_5ee1fdbb6985": 65,
+    "model_30cfb2a90607": 65
+  },
+  "bloom_seen_requests": {
+    "capacity": 100000,
+    "items_inserted": 1041,
+    "size_bytes": 137944
+  },
+  "count_min_freq_of_top_entities": {
+    "entity_5c837cd9f137": 9,
+    "entity_d310f5d64a79": 8,
+    "entity_30bd1f8a81a2": 8,
+    "entity_7658f2a48bf8": 8,
+    "entity_899f64de1fe6": 8
+  },
+  "topk_heavy_hitters": {
+    "entity_5c837cd9f137": 9,
+    "entity_d310f5d64a79": 8,
+    "entity_30bd1f8a81a2": 8,
+    "entity_7658f2a48bf8": 8,
+    "entity_899f64de1fe6": 8,
+    "entity_9fc3cb8d65cc": 8,
+    "entity_4a87c5f83d36": 8,
+    "entity_67c6fa8cf6b5": 8,
+    "entity_b7bdfb279bf2": 8,
+    "entity_e09841110414": 8
+  }
+}
+  -> Bloom Filter em acao: um request_id ja visto e um novo
+     BF.EXISTS(existente)=True  BF.EXISTS(inexistente)=False
+
+==============================================================================
+SUMARIO FINAL - CONTAGEM POR COLECAO
+==============================================================================
+  organizations                1
+  users                        2
+  projects                     3
+  models                       4
+  model_versions               8
+  predictions               1040
+  metrics_snapshots            8
+  entity_notes                18
+  audit_events                 2
+
+Pipeline concluido com sucesso.

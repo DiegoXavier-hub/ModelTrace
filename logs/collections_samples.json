@@ -1,0 +1,259 @@
+{
+  "organizations": {
+    "count": 1,
+    "sample": {
+      "_id": "org_ufu_gi_ops",
+      "name": "UFU GI Decision Ops Lab",
+      "plan": "enterprise-simulation",
+      "owner_id": "user_diego_ops",
+      "settings": {
+        "max_projects": 50,
+        "retention_days": 1825,
+        "enable_bias_analysis": true
+      },
+      "status": "active",
+      "created_at": "2026-06-13T12:00:00Z"
+    }
+  },
+  "users": {
+    "count": 2,
+    "sample": {
+      "_id": "user_diego_ops",
+      "org_id": "org_ufu_gi_ops",
+      "name": "Diego Henrique Xavier",
+      "email_hash": "00e48a815525529ba9d33f8761a167588fe00c47bc82f515cf791c482ed99ecc",
+      "email_masked": "d***@gmail.com",
+      "role": "OWNER",
+      "preferences": {
+        "theme": "dark",
+        "locale": "pt-BR"
+      },
+      "status": "active",
+      "created_at": "2026-06-13T12:00:00Z"
+    }
+  },
+  "projects": {
+    "count": 3,
+    "sample": {
+      "_id": "proj_tcc_student_outcomes",
+      "org_id": "org_ufu_gi_ops",
+      "name": "TCC Student Outcomes",
+      "domain": "education",
+      "problem_type": "binary_classification",
+      "owner_id": "user_diego_ops",
+      "entity_type": "student",
+      "settings": {
+        "default_threshold": 0.5,
+        "positive_label": "high_risk",
+        "negative_label": "low_risk",
+        "retention_days": 1825,
+        "data_contract_mode": "warn"
+      },
+      "stats": {
+        "total_predictions": 520,
+        "total_models": 2,
+        "active_alerts": 0
+      },
+      "status": "active",
+      "created_at": "2026-06-18T12:00:00Z"
+    }
+  },
+  "models": {
+    "count": 4,
+    "sample": {
+      "_id": "model_30cfb2a90607",
+      "org_id": "org_ufu_gi_ops",
+      "project_id": "proj_tcc_student_outcomes",
+      "name": "TCC GI XGBoost",
+      "slug": "tcc-gi-xgboost",
+      "problem_type": "binary_classification",
+      "target_name": "high_risk",
+      "labels": {
+        "positive": "high_risk",
+        "negative": "low_risk"
+      },
+      "default_threshold": 0.5,
+      "expected_features": [
+        {
+          "name": "nota_media",
+          "type": "numeric"
+        },
+        {
+          "name": "taxa_aprovacao",
+          "type": "numeric"
+        },
+        {
+          "name": "qtd_reprovacoes",
+          "type": "numeric"
+        },
+        {
+          "name": "delta_nota",
+          "type": "numeric"
+        },
+        {
+          "name": "tipo_ingresso",
+          "type": "categorical"
+        }
+      ],
+      "production_version_id": "version_9cd4b80aca21",
+      "status": "active",
+      "created_at": "2026-06-19T12:00:00Z"
+    }
+  },
+  "model_versions": {
+    "count": 8,
+    "sample": {
+      "_id": "version_a232dcaad582",
+      "org_id": "org_ufu_gi_ops",
+      "project_id": "proj_tcc_student_outcomes",
+      "model_id": "model_30cfb2a90607",
+      "version": "v1",
+      "algorithm": "XGBoost",
+      "status": "deprecated",
+      "features": [
+        "nota_media",
+        "taxa_aprovacao",
+        "qtd_reprovacoes",
+        "delta_nota",
+        "tipo_ingresso"
+      ],
+      "offline_metrics": {
+        "accuracy": 0.8252,
+        "precision": 0.7552,
+        "recall": 0.8452,
+        "f1": 0.7952,
+        "auc_roc": 0.8752
+      },
+      "created_at": "2026-06-20T12:00:00Z"
+    }
+  },
+  "predictions": {
+    "count": 1040,
+    "sample": {
+      "_id": "pred_2e586b83ccce",
+      "org_id": "org_ufu_gi_ops",
+      "project_id": "proj_tcc_student_outcomes",
+      "model_id": "model_30cfb2a90607",
+      "model_version_id": "version_9cd4b80aca21",
+      "model_version": "v2",
+      "entity": {
+        "id": "entity_30bd1f8a81a2",
+        "id_hash": "30bd1f8a81a269e70045f98a100e3c09db4aad6d64ff78cf5f095d44be962319",
+        "type": "student",
+        "display_name_masked": "[protected]"
+      },
+      "features": {
+        "nota_media": 64.4812,
+        "taxa_aprovacao": 0.6332,
+        "qtd_reprovacoes": 5,
+        "delta_nota": -9.0161,
+        "tipo_ingresso": "PROUNI"
+      },
+      "prediction": {
+        "label": "high_risk",
+        "score": 0.6401,
+        "threshold": 0.5,
+        "above_threshold": true,
+        "score_band": "high"
+      },
+      "explanations": [
+        {
+          "feature": "nota_media",
+          "value": 64.4812,
+          "impact": 0.2256,
+          "direction": "risk_up",
+          "rank": 1
+        },
+        {
+          "feature": "tipo_ingresso",
+          "value": "PROUNI",
+          "impact": 0.2241,
+          "direction": "risk_up",
+          "rank": 2
+        },
+        {
+          "feature": "taxa_aprovacao",
+          "value": 0.6332,
+          "impact": 0.0984,
+          "direction": "risk_up",
+          "rank": 3
+        }
+      ],
+      "decision": {
+        "action": "human_review",
+        "status": "triggered",
+        "reason": "score_above_threshold"
+      },
+      "feedback": {
+        "available": true,
+        "observed_value": 1,
+        "observed_label": "high_risk",
+        "classification_result": "tp",
+        "source": "seed_simulation",
+        "received_at": "2026-07-03T12:00:00Z"
+      },
+      "flags": {
+        "is_critical": false,
+        "reviewed_by": null
+      },
+      "metadata": {
+        "source_system": "seed_simulation",
+        "environment": "production_simulation",
+        "request_id": "seed_model_30cfb2a90607_000000",
+        "algorithm": "XGBoost"
+      },
+      "created_at": "2026-06-21T15:00:00Z"
+    }
+  },
+  "metrics_snapshots": {
+    "count": 8,
+    "sample": {
+      "_id": "model_5ee1fdbb6985::v1",
+      "model_name": "TCC GI RandomForest",
+      "version": "v1",
+      "domain_project_id": "proj_tcc_student_outcomes",
+      "confusion": {
+        "tp": 19,
+        "fp": 7,
+        "tn": 8,
+        "fn": 9
+      },
+      "n_with_feedback": 43,
+      "avg_score": 0.5301,
+      "precision": 0.7308,
+      "recall": 0.6786,
+      "f1": 0.7037,
+      "computed_at": "2026-07-13T12:00:00Z"
+    }
+  },
+  "entity_notes": {
+    "count": 18,
+    "sample": {
+      "_id": "note_037b0cb7d402",
+      "org_id": "org_ufu_gi_ops",
+      "project_id": "proj_tcc_student_outcomes",
+      "entity_id": "entity_4e01dd41bf45",
+      "entity_id_hash": "4e01dd41bf45d4b3244a4a9f3d3d5297a782e58a8e3f62594dd2e02f4cd784fb",
+      "author": "user_ops_analyst",
+      "text": "Entidade sob acompanhamento operacional (risco recorrente).",
+      "created_at": "2026-07-13T12:00:00Z"
+    }
+  },
+  "audit_events": {
+    "count": 2,
+    "sample": {
+      "_id": "audit_99445b09bd59",
+      "org_id": "org_ufu_gi_ops",
+      "project_id": "proj_tcc_student_outcomes",
+      "actor": {
+        "type": "system",
+        "id": "crud_pipeline"
+      },
+      "event_type": "prediction.created",
+      "context": {
+        "prediction_id": "pred_f47afcedf23f"
+      },
+      "created_at": "2026-07-13T12:00:00Z"
+    }
+  }
+}

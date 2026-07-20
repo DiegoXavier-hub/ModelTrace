@@ -1,0 +1,107 @@
+[
+  {
+    "a_id": "gentity_dd105eba7500",
+    "a_label": "lote#013",
+    "b_id": "gentity_a944c8832d1d",
+    "b_label": "lote#003",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_2eed11b37c6c",
+    "a_label": "lote#010",
+    "b_id": "gentity_c5adf814f4c1",
+    "b_label": "lote#025",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_a944c8832d1d",
+    "a_label": "lote#003",
+    "b_id": "gentity_3605a4a1ed70",
+    "b_label": "lote#023",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_dd105eba7500",
+    "a_label": "lote#013",
+    "b_id": "gentity_85c2e01bc9ef",
+    "b_label": "lote#020",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_c7969fdaa76e",
+    "a_label": "lote#002",
+    "b_id": "gentity_8b5dfdaabf33",
+    "b_label": "lote#029",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_33ec0bb9581f",
+    "a_label": "lote#001",
+    "b_id": "gentity_42677a565235",
+    "b_label": "lote#014",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_a944c8832d1d",
+    "a_label": "lote#003",
+    "b_id": "gentity_dd105eba7500",
+    "b_label": "lote#013",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_a944c8832d1d",
+    "a_label": "lote#003",
+    "b_id": "gentity_85c2e01bc9ef",
+    "b_label": "lote#020",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_0e24a67608f7",
+    "a_label": "lote#005",
+    "b_id": "gentity_49fcfb403cb9",
+    "b_label": "lote#030",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_b8bba2bcce78",
+    "a_label": "lote#006",
+    "b_id": "gentity_fafdc35f20a8",
+    "b_label": "lote#016",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_e485b2a038cf",
+    "a_label": "aluno#012",
+    "b_id": "gentity_6d6ff5d46956",
+    "b_label": "aluno#037",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_56e073507408",
+    "a_label": "aluno#039",
+    "b_id": "gentity_c0ba13fe4d32",
+    "b_label": "aluno#029",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_6d6ff5d46956",
+    "a_label": "aluno#037",
+    "b_id": "gentity_e485b2a038cf",
+    "b_label": "aluno#012",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_c0ba13fe4d32",
+    "a_label": "aluno#029",
+    "b_id": "gentity_56e073507408",
+    "b_label": "aluno#039",
+    "score": 1.0
+  },
+  {
+    "a_id": "gentity_dd105eba7500",
+    "a_label": "lote#013",
+    "b_id": "gentity_3605a4a1ed70",
+    "b_label": "lote#023",
+    "score": 1.0
+  }
+]

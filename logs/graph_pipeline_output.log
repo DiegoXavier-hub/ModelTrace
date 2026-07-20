@@ -1,0 +1,102 @@
+
+==============================================================================
+FASE 0 - CONEXAO (Neo4j + GDS)
+==============================================================================
+  -> Neo4j conectado: bolt://localhost:7688 (Neo4j Kernel 5.26.28)
+  -> Graph Data Science (GDS) disponivel: v2.13.11
+
+==============================================================================
+FASE 1 - GERAR DATASET FICTICIO (mesmo tema dos 3 projetos do crud_pipeline)
+==============================================================================
+  -> Gerado: 100 entities, 214 predictions, 15 features, 400 pares entity-feature agregados.
+
+==============================================================================
+FASE 2 - CONSTRUIR O GRAFO (nos + relacionamentos)
+==============================================================================
+  -> Grafo limpo (DETACH DELETE) e constraints de unicidade criadas (8 labels).
+  -> Nos: 1 organization, 3 projects, 4 models, 8 versions, 100 entities, 214 predictions, 15 features, 5 outcomes.
+  -> Relacionamentos: OWNS, HAS_MODEL, HAS_VERSION, PRODUCED, FOR_ENTITY, CLASSIFIED_AS, DRIVEN_BY (642), RISK_FACTOR (400).
+
+==============================================================================
+FASE 3 - GDS 1/3: gds.nodeSimilarity.write (Radar de Casos Similares)
+==============================================================================
+{
+  "nodesCompared": 100,
+  "relationshipsWritten": 500,
+  "similarityDistribution": {
+    "p1": 0.5999984741210938,
+    "max": 1.000007629394531,
+    "p5": 0.5999984741210938,
+    "p90": 1.0000038146972656,
+    "p50": 1.0000038146972656,
+    "p95": 1.0000038146972656,
+    "p10": 0.75,
+    "p75": 1.0000038146972656,
+    "p99": 1.0000038146972656,
+    "p25": 0.75,
+    "p100": 1.0000038146972656,
+    "min": 0.5999984741210938,
+    "mean": 0.8904019546508789,
+    "stdDev": 0.1374351632735866
+  }
+}
+
+==============================================================================
+FASE 4 - GDS 2/3: gds.louvain.write (comunidades de padrao de risco)
+==============================================================================
+{
+  "communityCount": 7,
+  "modularity": 0.6814364010259378
+}
+
+==============================================================================
+FASE 5 - GDS 3/3: gds.pageRank.write (influencia estrutural)
+==============================================================================
+{
+  "nodePropertiesWritten": 350,
+  "ranIterations": 20,
+  "didConverge": false
+}
+
+==============================================================================
+FASE 6 - EXPORTAR RESULTADOS + ATUALIZAR graph_visualizacao.html
+==============================================================================
+  -> graph_visualizacao.html atualizado (350 nos, 2199 arestas embutidos).
+  -> Grafo final: 350 nos, 2199 arestas, 7 comunidades (modularidade=0.6814).
+
+  Top 5 casos mais similares (gds.nodeSimilarity):
+    - student#000    <-> student#002     score=1.0
+    - student#000    <-> student#003     score=1.0
+    - student#000    <-> student#004     score=1.0
+    - student#000    <-> student#005     score=1.0
+    - student#001    <-> student#005     score=1.0
+
+  Top 5 nos mais influentes (gds.pageRank):
+    - [Feature     ] qtd_reprovacoes              pagerank=3.7738
+    - [Feature     ] tipo_ingresso                pagerank=3.6655
+    - [Feature     ] nota_media                   pagerank=3.6046
+    - [Feature     ] delta_nota                   pagerank=3.4043
+    - [Feature     ] taxa_aprovacao               pagerank=3.3448
+
+  Comunidades de padrao de risco (gds.louvain):
+    - comunidade 5    34 entidades  ex: ['student#000', 'student#001', 'student#002', 'student#003', 'student#004', 'student#005']
+    - comunidade 92   26 entidades  ex: ['company#000', 'company#001', 'company#002', 'company#003', 'company#004', 'company#005']
+    - comunidade 66   17 entidades  ex: ['industrial_asset#000', 'industrial_asset#002', 'industrial_asset#003', 'industrial_asset#004', 'industrial_asset#007', 'industrial_asset#008']
+    - comunidade 55   13 entidades  ex: ['industrial_asset#001', 'industrial_asset#005', 'industrial_asset#006', 'industrial_asset#010', 'industrial_asset#011', 'industrial_asset#014']
+    - comunidade 84    4 entidades  ex: ['company#010', 'company#014', 'company#019', 'company#027']
+    - comunidade 15    3 entidades  ex: ['student#010', 'student#015', 'student#031']
+    - comunidade 24    3 entidades  ex: ['student#012', 'student#024', 'student#034']
+
+==============================================================================
+SUMARIO FINAL - CONTAGEM POR TIPO DE NO
+==============================================================================
+  Organization       1
+  Project            3
+  Model              4
+  ModelVersion       8
+  Entity           100
+  Prediction       214
+  Feature           15
+  Outcome            5
+
+Pipeline de grafo concluido com sucesso.
